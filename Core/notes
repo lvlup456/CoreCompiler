@@ -1,0 +1,58 @@
+Instructions:
+
+   BCC  Zeros  opcode     ope2      IV
+0x|0000|0000|0|0000|0000|0000|0000|00000000
+             IV     ope1     dest
+
+r0 0000
+r1 0001
+r2 0010
+...
+r15 1111
+
+add r1, r1, 3 r1 = r1 +3
+add r1, 3 r1 = r1 +3
+
+
+ 
+Structure de donnees:
+   - r0..r15   -> registre "utilisateur"
+   - PC        -> pointe vers la prochaine instruction
+   - Flag      -> a determiner:
+      -flag compare ->
+         BEQ ope1 = ope2 
+         BNE ope1 !=ope2 
+         BLE ope1 ≤ ope2 
+         BGE ope1 ≥ ope2 
+         BL  ope1 < ope2 
+         BG  ope1 > ope2 
+
+
+
+TODO:
+   - Compilateur
+      - parse les infos
+      - creer les Instructions
+      - leve les erreurs
+      - places les instructions dans un fichier pour le core
+
+
+   - Core:
+      - Init:
+         - init les structure
+         - init les registres
+         - lis le fichier d'init
+
+      - Fetch
+         - compute le PC avec le BCC
+         - reset les flags
+         - 
+      - Decode
+         - deodes les differentes partie de l'instruction
+         - place dans une structure de donnees
+         - 
+      - Exec
+         - execute l'instruction
+         - leve les flags 
+         
+
