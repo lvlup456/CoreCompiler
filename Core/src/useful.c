@@ -1,6 +1,7 @@
 #include "useful.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 unsigned long rArray[15];
 sFlag flags;
@@ -8,12 +9,13 @@ int pc;
 
 void printSFlags(sFlag* flag){
     printf("les flags: \n");
-    printf("BEQ = %X\n",flag->BEQ);
-    printf("BNE = %X\n",flag->BNE);
-    printf("BLE = %X\n",flag->BLE);
-    printf("BGE = %X\n",flag->BGE);
-    printf("BL  = %X\n",flag->BL);
-    printf("BG  = %X\n",flag->BG);
+    printf("CF  = %X\n",flag->CF);
+    printf("PF  = %X\n",flag->PF);
+    printf("AF  = %X\n",flag->AF);
+    printf("ZF  = %X\n",flag->ZF);
+    printf("OF  = %X\n",flag->OF);
+    printf("SF  = %X\n",flag->SF);
+
 }
 
 void printSCore(sCore* core){
@@ -21,21 +23,34 @@ void printSCore(sCore* core){
     printf("pc = %X\n", core->pc);
 
     for (int i = 0; i < 15; i++){
-        printf("r%i = %lX\n",i ,core->rArray[i]);
+        printf("r%i = %llX\n",i ,core->rArray[i]);
     }
     printSFlags(&core->flags);   
 }
 
-
-
 void printSInstruction(sInstruction* instruction){
     printf("instruction: \n");
-    printf("%d--",instruction->bcc);
-    printf("%d--",instruction->zeros);
-    printf("%d--",instruction->ivFlag);
-    printf("%d--",instruction->opcode);
-    printf("%d--",instruction->ope1);
-    printf("%d--",instruction->ope2);
-    printf("%d--",instruction->dest);
-    printf("%d\n",instruction->iv);    
+    printf("%x--",instruction->bcc);
+    printf("%x--",instruction->zeros);
+    printf("%x--",instruction->ivFlag);
+    printf("%x--",instruction->opcode);
+    printf("%x--",instruction->ope1);
+    printf("%x--",instruction->ope2);
+    printf("%x--",instruction->dest);
+    printf("%x\n",instruction->iv);    
+}
+
+
+int getBits(int32_t n, int bitswanted){
+  return 0 != (n & (1 << bitswanted));;
+}
+
+int getFromBitTOBit(int32_t n, int firstBit, int lastBit ){
+    int res = 0;
+    int j = 0 ;
+    for (int i = firstBit; i <= lastBit; i++){
+        res += getBits(n, i) * pow(2,j);
+        j++;
+    }
+    return res;
 }

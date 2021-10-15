@@ -28,6 +28,20 @@ Structure de donnees:
          BG  ope1 > ope2 
 
 
+Flags:
+   - CF Carry Flag (Drapeau de retenue) : 
+      Ce drapeau est armé si une opération arithmétique génère une retenue sur le bit le plus significatif (bit de poids fort). Le drapeau est désarmé dans les autres cas. Ce drapeau indique ainsi une condition de débordement en arithmétique entière non signée. Il est aussi utilisé pour l'arithmétique en précision multiple.
+   - PF Parity Flag (Drapeau de parité) : 
+      Armé si l'octet de poids faible (octet le moins significatif) du résultat généré après une opération arithmétique contient un nombre pair de bits à 1. Le drapeau est désarmé dans les autres cas.
+   - AF Adjust Flag (Drapeau d'ajustement) : 
+      Armé si le résultat d'une opération arithmétique génère un résultat provoquant une retenue sur le troisième bit. Le drapeau est désarmé dans les autres cas. Ce drapeau n'est utile que dans l'utilisation du codage BCD.
+   - ZF Zero Flag (Drapeau zéro) : 
+      Armé si le résultat d'une opération arithmétique vaut zéro. Le drapeau est désarmé dans les autres cas.
+   - SF Sign Flag (Drapeau de signe) : 
+      Armé si le résultat d'une opération arithmétique possède un bit de poids fort (bit le plus significatif) à 1, indiquant ainsi un nombre signé négatif. Le drapeau est désarmé dans les autres cas (indiquant possiblement un résultat non signé, c'est-à-dire positif).
+   - OF Overflow Flag (Drapeau de débordement) : 
+      Armé si le résultat constitue un nombre positif ou négatif (en excluant le bit de signe) ne pouvant tenir dans l'opérande de destination. Le drapeau est désarmé dans les autres cas. Ce drapeau indique une condition de débordement pour les opérations arithmétiques signées sur les entiers.
+
 
 TODO:
    - Compilateur
@@ -56,3 +70,21 @@ TODO:
          - leve les flags 
          
 
+
+ADD:
+   dest = ope1 + ope2
+   Warning:
+      - ope1 + ope2 > sizeof(int32)
+      - sign(ope1) != sign(ope2)
+
+ORR dest = ope1 or ope2
+
+EOR dest = ope1 xor ope2
+AND dest = ope1 and ope2
+ADC dest = ope1 + ope2 + carry 
+CMP See section on CMP (2.5.5) 
+SUB dest = ope1 − ope2
+SBC dest = ope1 − ope2 + carry − 1 
+MOV dest = ope2
+LSH dest = ope1 << ope2
+RSH dest = ope1 >> ope2

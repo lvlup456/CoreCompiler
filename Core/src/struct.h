@@ -1,20 +1,21 @@
 #ifndef __STRUCTURE_H_
 #define __STRUCTURE_H_
+#include <stdlib.h>
 
 typedef struct sFlag sFlag;
 struct sFlag{
-    int BEQ ; //ope1 = ope2
-    int BNE ; //ope1 !=ope2
-    int BLE ; //ope1 ≤ ope2
-    int BGE ; //ope1 ≥ ope2
-    int BL  ; //ope1 < ope2
-    int BG  ; //ope1 > ope2
+    int CF  ; // Carry Flag (Drapeau de retenue)
+    int PF  ; // Parity Flag (Drapeau de parité)
+    int AF  ; // Adjust Flag (Drapeau d'ajustement)
+    int ZF  ; // Zero Flag (Drapeau zéro)
+    int OF  ; // Overflow Flag (Drapeau de débordement)
+    int SF  ; // Sign Flag (Drapeau de signe)
 };
 
 
 typedef struct sCore sCore;
 struct sCore{
-    unsigned long rArray[15];
+    int64_t rArray[15];
     sFlag flags;
     int pc;
 };

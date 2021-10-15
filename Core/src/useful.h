@@ -7,6 +7,7 @@
 void printSCore(sCore* core);
 void printSInstruction(sInstruction* instruction);
 
-
+int getBits(int32_t n, int bitswanted);
+int getFromBitTOBit(int32_t n, int firstBit, int lastBit );
 
 #endif

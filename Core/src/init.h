@@ -9,5 +9,6 @@ void initSCore(sCore* core);
 void initSFlag(sFlag* flag);
 void initSCoreWithValues(char* path, sCore* core);
 int32_t* initInstructionArray(char* path);
+void initSFlag(sFlag* flag);
 
 #endif

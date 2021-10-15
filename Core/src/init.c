@@ -6,12 +6,12 @@
 
 
 void initSFlag(sFlag* flag){
-    flag->BEQ = 0;
-    flag->BNE = 0;
-    flag->BLE = 0;
-    flag->BGE = 0;
-    flag->BL  = 0;
-    flag->BG  = 0;
+    flag->CF = 0;
+    flag->PF = 0;
+    flag->AF = 0;
+    flag->ZF = 0;
+    flag->OF  = 0;
+    flag->SF  = 0;
 }
 
 void initSCore(sCore* core){
@@ -93,7 +93,6 @@ int countLine(char* path){
 int32_t* initInstructionArray(char* path){
     FILE* fp = lireFichier(path);
     int32_t* instructArray = malloc(countLine(path) * sizeof(int32_t));
-    
     char * endPtr;
     char* pointerLine = NULL;
     size_t len = 0;
@@ -107,7 +106,6 @@ int32_t* initInstructionArray(char* path){
             printf("Wrong instruction length\n");
             exit(EXIT_SUCCESS);    
         }
-        printf("%s\n", pointerLine);
         instructArray[i] = strtol( pointerLine, &endPtr, 16 );
         if (endPtr == pointerLine){
             printf("Wrong instrcution format\n");
@@ -115,5 +113,7 @@ int32_t* initInstructionArray(char* path){
         }
         i++;
     }
+
+    
     return instructArray;
 }

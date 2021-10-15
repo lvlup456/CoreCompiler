@@ -5,6 +5,6 @@
 #include <stdlib.h>
 
 
-sInstruction fetch(sCore* core, int32_t** instructionArray);
+int32_t fetch(sCore* core, int32_t* instructionArray);
 
 #endif
