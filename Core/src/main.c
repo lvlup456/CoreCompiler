@@ -26,8 +26,11 @@ int main(){
     while (core.pc < instructionsArraySize){
         toBeExecRaw = fetch(&core, instructionsArray);
         toBeExec = decode(toBeExecRaw);
-        execute(toBeExec);
+        execute(&core, toBeExec);
     }
+    printf("fin: \n");
+    printSCore(&core);
+
 
     return 0;
 }

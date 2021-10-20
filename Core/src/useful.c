@@ -10,8 +10,6 @@ int pc;
 void printSFlags(sFlag* flag){
     printf("les flags: \n");
     printf("CF  = %X\n",flag->CF);
-    printf("PF  = %X\n",flag->PF);
-    printf("AF  = %X\n",flag->AF);
     printf("ZF  = %X\n",flag->ZF);
     printf("OF  = %X\n",flag->OF);
     printf("SF  = %X\n",flag->SF);
@@ -41,12 +39,12 @@ void printSInstruction(sInstruction* instruction){
 }
 
 
-int getBits(int32_t n, int bitswanted){
+int32_t getBits(int32_t n, int bitswanted){
   return 0 != (n & (1 << bitswanted));;
 }
 
-int getFromBitTOBit(int32_t n, int firstBit, int lastBit ){
-    int res = 0;
+int32_t getFromBitTOBit(int32_t n, int firstBit, int lastBit ){
+    int32_t res = 0;
     int j = 0 ;
     for (int i = firstBit; i <= lastBit; i++){
         res += getBits(n, i) * pow(2,j);

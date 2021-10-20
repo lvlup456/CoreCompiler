@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 
-void execute(sInstruction instruction);
+void execute(sCore* core, sInstruction instruction);
+
 
 #endif

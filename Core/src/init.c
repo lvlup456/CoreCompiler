@@ -7,8 +7,6 @@
 
 void initSFlag(sFlag* flag){
     flag->CF = 0;
-    flag->PF = 0;
-    flag->AF = 0;
     flag->ZF = 0;
     flag->OF  = 0;
     flag->SF  = 0;
@@ -63,7 +61,7 @@ void initSCoreWithValues(char* path, sCore* core){
                     printf("Wrong register value in init file  : %s\n",path);
                     exit(EXIT_SUCCESS);              
                 }else{
-                    core->rArray[registerNumber + 1] = registerValue;
+                    core->rArray[registerNumber] = registerValue;
                     pointerLine = endPtr;
                     registerNumber = -1;
                 }
@@ -113,7 +111,5 @@ int32_t* initInstructionArray(char* path){
         }
         i++;
     }
-
-    
     return instructArray;
 }

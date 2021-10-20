@@ -64,7 +64,6 @@ void computeNewPc(sCore* core, int bcc, int32_t instruction){
 
 
 
-//TODO: reset flag
 int32_t fetch(sCore* core, int32_t* instructionArray){
 
     int32_t instructionRaw = instructionArray[core->pc];

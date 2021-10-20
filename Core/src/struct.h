@@ -5,8 +5,6 @@
 typedef struct sFlag sFlag;
 struct sFlag{
     int CF  ; // Carry Flag (Drapeau de retenue)
-    int PF  ; // Parity Flag (Drapeau de parité)
-    int AF  ; // Adjust Flag (Drapeau d'ajustement)
     int ZF  ; // Zero Flag (Drapeau zéro)
     int OF  ; // Overflow Flag (Drapeau de débordement)
     int SF  ; // Sign Flag (Drapeau de signe)
@@ -27,14 +25,14 @@ struct sCore{
 */
 typedef struct sInstruction sInstruction;
 struct sInstruction{
-    int bcc;        // 4 bits
-    int zeros;      // 3 bits
-    int ivFlag;     // 1 bits
-    int opcode;     // 4 bits
-    int ope1;       // 4 bits
-    int ope2;       // 4 bits
-    int dest;       // 4 bits
-    int iv;         // 8 bits
+    unsigned int bcc;        // 4 bits
+    unsigned int zeros;      // 3 bits
+    unsigned int ivFlag;     // 1 bits
+    unsigned int opcode;     // 4 bits
+    unsigned int ope1;       // 4 bits
+    unsigned int ope2;       // 4 bits
+    unsigned int dest;       // 4 bits
+    unsigned int iv;         // 8 bits
 };
 
 #endif
