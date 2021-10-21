@@ -4,7 +4,7 @@
 
 int64_t selectVal2(sCore* core, sInstruction instruction){
     if (instruction.ivFlag){
-        //TODO: test neg
+        //TODO: test neg conversion sign 8bits to sign 64bits
         return instruction.iv;
     }else{
         return core->rArray[instruction.ope1];
@@ -12,87 +12,98 @@ int64_t selectVal2(sCore* core, sInstruction instruction){
 }
 
 
-//TODO: add flags and exceptions
 void add(sCore* core, sInstruction instruction){
-    int64_t val1,val2;
+    int64_t val1,val2, res;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
-    
-    core->rArray[instruction.dest] = val1 + val2;
+
+    res = val1 + val2;
+    //TODO: set CF and OF
+    core->flags.ZF = res == 0;
+    core->flags.SF = res<0;
+    core->rArray[instruction.dest] = res;
 }
 
-//TODO: add flags and exceptions
 void orr(sCore* core, sInstruction instruction){
     int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     core->rArray[instruction.dest] = val1 || val2;
+
+    core->flags.CF = 1;
+    core->flags.OF = 1;
+    core->flags.ZF = core->rArray[instruction.dest] == 0;
+    core->flags.SF = core->rArray[instruction.dest] < 0;
 }
 
-//TODO: add flags and exceptions
 void and(sCore* core, sInstruction instruction){
     int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     core->rArray[instruction.dest] = val1 && val2;
+    core->flags.CF = 1;
+    core->flags.OF = 1;
+    core->flags.ZF = core->rArray[instruction.dest] == 0;
+    core->flags.SF = core->rArray[instruction.dest] < 0;
 }
 
-//TODO: add flags and exceptions
 void xor(sCore* core, sInstruction instruction){
     int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     core->rArray[instruction.dest] = val1 ^ val2;
+    core->flags.CF = 1;
+    core->flags.OF = 1;
+    core->flags.ZF = core->rArray[instruction.dest] == 0;
+    core->flags.SF = core->rArray[instruction.dest] < 0;
 }
 
-//TODO: add flags and exceptions
 void adc(sCore* core, sInstruction instruction){
-    int64_t val1,val2;
+    int64_t val1,val2, res;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
-    core->rArray[instruction.dest] = val1 + val2 + core->flags.CF;
+    res = val1 + val2 + core->flags.CF;
+
+    //TODO: set CF and OF
+    core->flags.ZF = res == 0;
+    core->flags.SF = res<0;
+    core->rArray[instruction.dest] = res;
+
 }
 
-//TODO: add flags and exceptions
 void cmp(sCore* core, sInstruction instruction){
     int val1,val2, tmp;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     tmp = val1 - val2;
-    if (tmp<0){
-        core->flags.SF = 1;
-    }else if (tmp > 0){
-        core->flags.SF = 0;
-    }else if (tmp == 0){
-        core->flags.ZF = 1;
-    }
+    //TODO: set CF and OF
+    core->flags.SF = tmp<0;
+    core->flags.SF = tmp > 0;
+    core->flags.ZF = tmp == 0;
 }
 
-//TODO: add flags and exceptions
 void sub(sCore* core, sInstruction instruction){
     int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     core->rArray[instruction.dest] = val1 - val2;
-
-    if (core->rArray[instruction.dest] < 0){
-        core->flags.SF = 1;
-    }else if (core->rArray[instruction.dest] > 0){
-        core->flags.SF = 0;
-    }else if (core->rArray[instruction.dest] == 0){
-        core->flags.ZF = 1;
-    }
+    //TODO: set CF and OF
+    core->flags.SF = core->rArray[instruction.dest] < 0;
+    core->flags.SF = core->rArray[instruction.dest] > 0;
+    core->flags.ZF = core->rArray[instruction.dest] == 0;
 }
 
-//TODO: add flags and exceptions
 void sbc(sCore* core, sInstruction instruction){
     int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     core->rArray[instruction.dest] = val1 - val2 + core->flags.CF - 1;
+    //TODO: set CF and OF
+    core->flags.SF = core->rArray[instruction.dest] < 0;
+    core->flags.SF = core->rArray[instruction.dest] > 0;
+    core->flags.ZF = core->rArray[instruction.dest] == 0;
 }
 
-//TODO: add flags and exceptions
 void mov(sCore* core, sInstruction instruction){
     int val2;
     val2 = selectVal2(core,instruction);
@@ -104,6 +115,10 @@ void lsh(sCore* core, sInstruction instruction){
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     core->rArray[instruction.dest] = val1 << val2;
+    //TODO: set CF and OF
+    core->flags.SF = core->rArray[instruction.dest] < 0;
+    core->flags.SF = core->rArray[instruction.dest] > 0;
+    core->flags.ZF = core->rArray[instruction.dest] == 0;
 }
 
 void rsh(sCore* core, sInstruction instruction){
@@ -111,11 +126,14 @@ void rsh(sCore* core, sInstruction instruction){
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     core->rArray[instruction.dest] = val1 >> val2;
+    //TODO: set CF and OF
+    core->flags.SF = core->rArray[instruction.dest] < 0;
+    core->flags.SF = core->rArray[instruction.dest] > 0;
+    core->flags.ZF = core->rArray[instruction.dest] == 0;
 }
 
 
 void execute(sCore* core, sInstruction instruction){
-    printf("j'execute des trucs\n");
     switch (instruction.opcode){
         case 0x0:
             and(core,instruction);

@@ -68,7 +68,6 @@ int32_t fetch(sCore* core, int32_t* instructionArray){
 
     int32_t instructionRaw = instructionArray[core->pc];
     computeNewPc(core, getFromBitTOBit(instructionRaw, 28, 31),instructionRaw);
-    initSFlag(&core->flags);
 
     return instructionRaw;
 }
