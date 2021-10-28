@@ -143,12 +143,14 @@ for line in lines :
 f = open(file_output, "wb")
 for line in instructions:
     print("Bits :", line)
+    print(type(line))
     print("Length: ", len(line))
     int_value = int(line,2)
     print("Int value: ", int_value)
     byte_value = int_value.to_bytes(4,byteorder="big")
     print("Byte value: ", byte_value)
     f.write(byte_value)
+    f.write(ord("\n").to_bytes(2,byteorder="big"));
                 
 
 
