@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "execute.h"
 #include <math.h>
+#include "useful.h"
 
 int64_t selectVal2(sCore* core, sInstruction instruction){
     if (instruction.ivFlag){
@@ -11,14 +12,18 @@ int64_t selectVal2(sCore* core, sInstruction instruction){
     }   
 }
 
-
 void add(sCore* core, sInstruction instruction){
-    int64_t val1,val2, res;
+    int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
 
-    res = val1 + val2;
-    //TODO: set CF and OF
+    __int128_t res = val1 + val2;
+    if (res > INT64_MIN && res < INT64_MAX){
+        core->rArray[instruction.dest] = (int64_t) res;
+    }else{
+        core->flags.OF = 1;
+        core->rArray[instruction.dest] = int128ToInt64(res);
+    }
     core->flags.ZF = res == 0;
     core->flags.SF = res<0;
     core->rArray[instruction.dest] = res;
@@ -30,8 +35,8 @@ void orr(sCore* core, sInstruction instruction){
     val2 = selectVal2(core,instruction);
     core->rArray[instruction.dest] = val1 || val2;
 
-    core->flags.CF = 1;
-    core->flags.OF = 1;
+    core->flags.CF = 0;
+    core->flags.OF = 0;
     core->flags.ZF = core->rArray[instruction.dest] == 0;
     core->flags.SF = core->rArray[instruction.dest] < 0;
 }
@@ -41,8 +46,8 @@ void and(sCore* core, sInstruction instruction){
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     core->rArray[instruction.dest] = val1 && val2;
-    core->flags.CF = 1;
-    core->flags.OF = 1;
+    core->flags.CF = 0;
+    core->flags.OF = 0;
     core->flags.ZF = core->rArray[instruction.dest] == 0;
     core->flags.SF = core->rArray[instruction.dest] < 0;
 }
@@ -52,19 +57,24 @@ void xor(sCore* core, sInstruction instruction){
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     core->rArray[instruction.dest] = val1 ^ val2;
-    core->flags.CF = 1;
-    core->flags.OF = 1;
+    core->flags.CF = 0;
+    core->flags.OF = 0;
     core->flags.ZF = core->rArray[instruction.dest] == 0;
     core->flags.SF = core->rArray[instruction.dest] < 0;
 }
 
 void adc(sCore* core, sInstruction instruction){
-    int64_t val1,val2, res;
+    int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
-    res = val1 + val2 + core->flags.CF;
-
-    //TODO: set CF and OF
+    __int128_t res = 0;
+    res += val1 + val2 + core->flags.CF; 
+    if (res > INT64_MIN && res < INT64_MAX){
+        core->rArray[instruction.dest] = (int64_t) res;
+    }else{
+        core->flags.OF = 1;
+        core->rArray[instruction.dest] = int128ToInt64(res);
+    }
     core->flags.ZF = res == 0;
     core->flags.SF = res<0;
     core->rArray[instruction.dest] = res;
@@ -75,9 +85,11 @@ void cmp(sCore* core, sInstruction instruction){
     int val1,val2, tmp;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
-    tmp = val1 - val2;
-    //TODO: set CF and OF
-    core->flags.SF = tmp<0;
+    __int128_t temp = val1 - val2;
+    if (temp < INT64_MIN && temp > INT64_MAX){
+        core->flags.OF = 1;
+    }
+    core->flags.SF = tmp < 0;
     core->flags.SF = tmp > 0;
     core->flags.ZF = tmp == 0;
 }
@@ -86,8 +98,13 @@ void sub(sCore* core, sInstruction instruction){
     int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
-    core->rArray[instruction.dest] = val1 - val2;
-    //TODO: set CF and OF
+    __int128_t res = val1 - val2;
+    if (res > INT64_MIN && res < INT64_MAX){
+        core->rArray[instruction.dest] = (int64_t) res;
+    }else{
+        core->flags.OF = 1;
+        core->rArray[instruction.dest] = int128ToInt64(res);
+    }
     core->flags.SF = core->rArray[instruction.dest] < 0;
     core->flags.SF = core->rArray[instruction.dest] > 0;
     core->flags.ZF = core->rArray[instruction.dest] == 0;
@@ -97,8 +114,13 @@ void sbc(sCore* core, sInstruction instruction){
     int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
-    core->rArray[instruction.dest] = val1 - val2 + core->flags.CF - 1;
-    //TODO: set CF and OF
+    __int128_t res = val1 - val2 + core->flags.CF - 1;
+    if (res > INT64_MIN && res < INT64_MAX){
+        core->rArray[instruction.dest] = (int64_t) res;
+    }else{
+        core->flags.OF = 1;
+        core->rArray[instruction.dest] = int128ToInt64(res);
+    }
     core->flags.SF = core->rArray[instruction.dest] < 0;
     core->flags.SF = core->rArray[instruction.dest] > 0;
     core->flags.ZF = core->rArray[instruction.dest] == 0;
@@ -114,8 +136,13 @@ void lsh(sCore* core, sInstruction instruction){
     int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
-    core->rArray[instruction.dest] = val1 << val2;
-    //TODO: set CF and OF
+    __int128_t res = val1 << val2;
+    if (res > INT64_MIN && res < INT64_MAX){
+        core->rArray[instruction.dest] = (int64_t) res;
+    }else{
+        core->flags.OF = 1;
+        core->rArray[instruction.dest] = int128ToInt64(res);
+    }
     core->flags.SF = core->rArray[instruction.dest] < 0;
     core->flags.SF = core->rArray[instruction.dest] > 0;
     core->flags.ZF = core->rArray[instruction.dest] == 0;
@@ -125,8 +152,13 @@ void rsh(sCore* core, sInstruction instruction){
     int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
-    core->rArray[instruction.dest] = val1 >> val2;
-    //TODO: set CF and OF
+    __int128_t res = val1 >> val2;
+    if (res > INT64_MIN && res < INT64_MAX){
+        core->rArray[instruction.dest] = (int64_t) res;
+    }else{
+        core->flags.OF = 1;
+        core->rArray[instruction.dest] = int128ToInt64(res);
+    }
     core->flags.SF = core->rArray[instruction.dest] < 0;
     core->flags.SF = core->rArray[instruction.dest] > 0;
     core->flags.ZF = core->rArray[instruction.dest] == 0;

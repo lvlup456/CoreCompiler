@@ -39,16 +39,44 @@ void printSInstruction(sInstruction* instruction){
 }
 
 
-int32_t getBits(int32_t n, int bitswanted){
+int32_t getBits32(int32_t n, int bitswanted){
   return 0 != (n & (1 << bitswanted));;
 }
 
-int32_t getFromBitTOBit(int32_t n, int firstBit, int lastBit ){
+int64_t getBits64(int64_t n, int bitswanted){
+  return 0 != (n & (1 << bitswanted));;
+}
+
+
+int32_t getFromBitTOBit32(int32_t n, int firstBit, int lastBit ){
     int32_t res = 0;
     int j = 0 ;
     for (int i = firstBit; i <= lastBit; i++){
-        res += getBits(n, i) * pow(2,j);
+        res += getBits32(n, i) * pow(2,j);
         j++;
     }
     return res;
+}
+
+int64_t getFromBitTOBit64(int64_t n, int firstBit, int lastBit ){
+    int64_t res = 0;
+    int j = 0 ;
+    for (int i = firstBit; i <= lastBit; i++){
+        res += getBits64(n, i) * pow(2,j);
+        j++;
+    }
+    return res;
+}
+
+int getBits128(__int128_t n, __uint128_t bitswanted){
+    __uint128_t mask = (((__uint128_t)1 ) << bitswanted);
+    return 0 != (n & mask);
+}
+
+int64_t int128ToInt64(__int128_t n){
+    int64_t val = 0;
+    for (int i = 62; i >= 0; i--){
+        val += (int64_t) (getBits128(n, i) * (int64_t)powl(2,i));
+    }
+    return val * pow(-1, getBits128(n, 128));
 }
