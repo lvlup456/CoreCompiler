@@ -8,7 +8,7 @@ int64_t selectVal2(sCore* core, sInstruction instruction){
         //TODO: test neg conversion sign 8bits to sign 64bits
         return instruction.iv;
     }else{
-        return core->rArray[instruction.ope1];
+        return core->rArray[instruction.ope2];
     }   
 }
 
@@ -16,7 +16,7 @@ void add(sCore* core, sInstruction instruction){
     int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
-
+    printf("%lld + %lld\n",val1,val2);
     __int128_t res = val1 + val2;
     if (res > INT64_MIN && res < INT64_MAX){
         core->rArray[instruction.dest] = (int64_t) res;
@@ -82,11 +82,11 @@ void adc(sCore* core, sInstruction instruction){
 }
 
 void cmp(sCore* core, sInstruction instruction){
-    int val1,val2, tmp;
+    int val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
-    __int128_t temp = val1 - val2;
-    if (temp < INT64_MIN && temp > INT64_MAX){
+    __int128_t tmp = val1 - val2;
+    if (tmp < INT64_MIN && tmp > INT64_MAX){
         core->flags.OF = 1;
     }
     core->flags.SF = tmp < 0;

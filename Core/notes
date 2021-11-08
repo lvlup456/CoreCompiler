@@ -88,3 +88,8 @@ SBC dest = ope1 − ope2 + carry − 1
 MOV dest = ope2
 LSH dest = ope1 << ope2
 RSH dest = ope1 >> ope2
+
+
+
+
+BCC---0---IVflag---opcode---ope1---ope2---dest---IVvalue

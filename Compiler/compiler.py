@@ -94,13 +94,14 @@ for line in lines :
     else:
         instr +="0000"
         instr +="000"
+        print(len(line))
         if (len(line) == 3):#Compare 
             if (line[2].isnumeric()): 
                 instr+="1"
                 instr+=padding(bin(int(OPCODE.get(line[0]),16)).replace("0b",""))
                 instr+="0000"
                 instr+="0000"
-                instr+="0000"
+                instr+=padding(bin(int(REGISTERS.get(line[1]),16)).replace("0b",""))
                 iv=bin(int(line[2],16)).replace("0b","")
                 if (len(iv)<8) :
                     add = 8- len(iv)

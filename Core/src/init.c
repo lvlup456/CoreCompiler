@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <math.h>
 
 void initSFlag(sFlag* flag){
     flag->CF = 0;
@@ -91,7 +91,6 @@ int countLine(char* path){
 int32_t* initInstructionArray(char* path){
     FILE* fp = lireFichier(path);
     int32_t* instructArray = malloc(countLine(path) * sizeof(int32_t));
-    char * endPtr;
     char* pointerLine = NULL;
     size_t len = 0;
     ssize_t read;
@@ -100,15 +99,13 @@ int32_t* initInstructionArray(char* path){
 
     while ((read = getline(&pointerLine, &len, fp)) != -1){
         lenLine = strlen(pointerLine);
-        if ( lenLine != 9 && lenLine != 8){
-            printf("Wrong instruction length\n");
-            exit(EXIT_SUCCESS);    
+        instructArray[i] = 0;
+        for (int j = 3; j >= 0; j--){
+            //TODO: mult pow marche pas
+            instructArray[i] += ((unsigned char) *pointerLine) * (int)powl(16,j*2);
+            pointerLine++;
         }
-        instructArray[i] = strtol( pointerLine, &endPtr, 16 );
-        if (endPtr == pointerLine){
-            printf("Wrong instrcution format\n");
-            exit(EXIT_SUCCESS); 
-        }
+        //printf("int: %x\n",instructArray[i]);
         i++;
     }
     return instructArray;
