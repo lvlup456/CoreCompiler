@@ -79,14 +79,15 @@ for line in lines :
     line = [s.upper() for s in line if (len(s) !=0 )]
     print(line)
     if (BCC.get(line[0],"None") != "None"):
-        instr += padding(bin(int(BCC.get(line[0]),16)).replace("0b",""))
+        instr += padding(bin(int(BCC.get(line[0]),10)).replace("0b",""))
+        print(padding(bin(int(BCC.get(line[0]),10)).replace("0b","")))
         if ("-" in line[1]):
             instr +="1" #Negatif
         else:
             instr += "0" #Positif
         offset = bin(int(line[1].replace("0x","").replace("-","").replace("+",""),16)).replace("0b","")
-        if (len(offset)<27) :
-            add = 27- len(offset)
+        if (len(offset)<26) :
+            add = 26 - len(offset)
             instr += "0"*add + offset
         else: 
             instr += offset

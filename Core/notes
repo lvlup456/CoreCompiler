@@ -93,3 +93,14 @@ RSH dest = ope1 >> ope2
 
 
 BCC---0---IVflag---opcode---ope1---ope2---dest---IVvalue
+
+
+r1,r2
+r3,r4
+
+add r5,r2,r4
+adc r6,r1,r3
+adc r7,r8,r9
+
+69F2184065078B839A766354D29817BF
+69f2184065078b849a766354d29817bf

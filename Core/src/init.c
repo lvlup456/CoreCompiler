@@ -8,7 +8,6 @@
 void initSFlag(sFlag* flag){
     flag->CF = 0;
     flag->ZF = 0;
-    flag->OF  = 0;
     flag->SF  = 0;
 }
 
@@ -37,13 +36,14 @@ void initSCoreWithValues(char* path, sCore* core){
     char * endPtr;
     size_t len = 0;
     int registerNumber;
-    int registerValue;
+    int64_t registerValue;
     ssize_t read;
 
     while ((read = getline(&pointerLine, &len, fp)) != -1){
         while (*pointerLine != '\n' && *pointerLine != '\0' && *pointerLine != EOF ){
             if (*pointerLine != 'R' || *pointerLine != 'r'){
                 pointerLine++;
+
                 registerNumber = strtol( pointerLine, &endPtr, 10 ); 
                 if (endPtr == pointerLine){
                     printf("Wrong register number in init file  : %s\n",path);
@@ -53,22 +53,23 @@ void initSCoreWithValues(char* path, sCore* core){
                     printf("Wrong register name in init file  : %s\n",path);
                     exit(EXIT_SUCCESS);
                 } 
+                pointerLine++;
                 while (*pointerLine != '\n' && *pointerLine != '\0' && *pointerLine != '0'){
                     pointerLine ++;
                 }
-                registerValue = strtol( pointerLine, &endPtr, 16 ); 
+                registerValue = strtoull( pointerLine, &endPtr, 16 ); 
                 if (endPtr == pointerLine){
                     printf("Wrong register value in init file  : %s\n",path);
                     exit(EXIT_SUCCESS);              
                 }else{
                     core->rArray[registerNumber] = registerValue;
+                    registerValue = 0;  
                     pointerLine = endPtr;
                     registerNumber = -1;
                 }
             }
             pointerLine++;
         }
-
     }
     fclose(fp);
 }
@@ -105,7 +106,6 @@ int32_t* initInstructionArray(char* path){
             instructArray[i] += ((unsigned char) *pointerLine) * (int)powl(16,j*2);
             pointerLine++;
         }
-        //printf("int: %x\n",instructArray[i]);
         i++;
     }
     return instructArray;

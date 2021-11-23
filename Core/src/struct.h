@@ -6,7 +6,6 @@ typedef struct sFlag sFlag;
 struct sFlag{
     int CF  ; // Carry Flag (Drapeau de retenue)
     int ZF  ; // Zero Flag (Drapeau zéro)
-    int OF  ; // Overflow Flag (Drapeau de débordement)
     int SF  ; // Sign Flag (Drapeau de signe)
 };
 

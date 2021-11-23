@@ -9,18 +9,10 @@
 int pcEquation(int pc, int instruction27, int instruction26to0){
     return pc + pow(-1,instruction27) * instruction26to0;
 }
-/**
-   - CF Carry Flag (Drapeau de retenue) : 
-   - PF Parity Flag (Drapeau de parité) : 
-   - AF Adjust Flag (Drapeau d'ajustement) : 
-   - ZF Zero Flag (Drapeau zéro) : 
-   - SF Sign Flag (Drapeau de signe) : 
-   - OF Overflow Flag (Drapeau de débordement) : 
-**/
 
 void setPcAccordingToFlag(sCore* core, int32_t instruction,int boolean){
     if(boolean){
-        core->pc += pcEquation(core->pc, getFromBitTOBit32(instruction, 27, 27),getFromBitTOBit32(instruction, 0, 27));
+        core->pc = pcEquation(core->pc, getFromBitTOBit32(instruction, 27, 27),getFromBitTOBit32(instruction, 0, 26));
     }else{
         core->pc++;
     }
@@ -67,7 +59,11 @@ void computeNewPc(sCore* core, int bcc, int32_t instruction){
 int32_t fetch(sCore* core, int32_t* instructionArray){
 
     int32_t instructionRaw = instructionArray[core->pc];
-    computeNewPc(core, getFromBitTOBit32(instructionRaw, 28, 31),instructionRaw);
-
-    return instructionRaw;
+    int bcc = getFromBitTOBit32(instructionRaw, 28, 31);
+    computeNewPc(core, bcc,instructionRaw);
+    if(bcc != 0){
+        return -1;
+    }else{
+        return instructionRaw;
+    }
 }

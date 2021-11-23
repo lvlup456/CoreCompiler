@@ -11,9 +11,7 @@ void printSFlags(sFlag* flag){
     printf("les flags: \n");
     printf("CF  = %X\n",flag->CF);
     printf("ZF  = %X\n",flag->ZF);
-    printf("OF  = %X\n",flag->OF);
     printf("SF  = %X\n",flag->SF);
-
 }
 
 void printSCore(sCore* core){
@@ -79,4 +77,21 @@ int64_t int128ToInt64(__int128_t n){
         val += (int64_t) (getBits128(n, i) * (int64_t)powl(2,i));
     }
     return val * pow(-1, getBits128(n, 128));
+}
+
+
+
+int64_t uint128ToInt64(__uint128_t n){
+    int64_t val = 0;
+    for (int i = 63; i >= 0; i--){
+        val += (int64_t) (getBits128(n, i) * (int64_t)powl(2,i));
+    }
+    return val;
+}
+
+void print128(__uint128_t res){
+    for (int i = 128; i >= 0; i--){
+        printf("%d", getBits128(res, i));
+    }
+    printf("\n");
 }
