@@ -15,7 +15,9 @@ sInstruction decode(int32_t instructionRaw){
     instruction.dest   = getFromBitTOBit32(instructionRaw, 8, 11);
     instruction.iv     = getFromBitTOBit32(instructionRaw, 0, 7);    
 
-    printSInstruction(&instruction);
+    if (VERBOSE){
+        printSInstruction(&instruction);
+    }
 
     return instruction;
 }

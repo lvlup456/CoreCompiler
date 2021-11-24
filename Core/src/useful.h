@@ -15,5 +15,7 @@ int64_t int128ToInt64(__int128_t n);
 int64_t uint128ToInt64(__uint128_t n);
 int getBits128(__int128_t n, __uint128_t bitswanted);
 void print128(__uint128_t res);
+int VERBOSE;
+
 
 #endif

@@ -8,32 +8,34 @@
 #include "execute.h"
 #include <string.h>
 
+
+
 int main(int argc, char **argv){
 
     sCore core;
     int32_t toBeExecRaw;
     sInstruction toBeExec;
     char code[100],state[100];
-    int verbose;
 
-    if (argc == 2){
+    if (argc == 3){
         strcpy(code,argv[1]);
         strcpy(state,argv[2]);
-        verbose = 0;
-    }else if (argc == 3){
+        VERBOSE = 0;
+    }else if (argc == 4){
         strcpy(code,argv[1]);
         strcpy(state,argv[2]);
-        verbose = 1;
+        VERBOSE = 1;
     }else{  
         printf("usage: <CODE> <State> (Verbose)");
         exit(EXIT_SUCCESS);
     }
     
-
-
     initSCore(&core);
     initSCoreWithValues(state, &core);
-    printSCore(&core);
+
+    if (VERBOSE){
+        printSCore(&core);  
+    }
 
     int32_t* instructionsArray = initInstructionArray(code);
     int instructionsArraySize = 0;
@@ -46,7 +48,10 @@ int main(int argc, char **argv){
             toBeExec = decode(toBeExecRaw);
             execute(&core, toBeExec);
         }
-        printSCore(&core);
+        if (VERBOSE){
+            printSCore(&core);
+            printf("\n\n\n");
+        }
     }
     printf("fin: \n");
     printSCore(&core);

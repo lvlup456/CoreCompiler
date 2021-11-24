@@ -164,55 +164,87 @@ void rsh(sCore* core, sInstruction instruction){
     core->flags.ZF = core->rArray[instruction.dest] == 0;
 }
 
-void execute(sCore* core, sInstruction instruction){
-    switch (instruction.opcode){
+void printInstruction(int code){
+    switch (code){
         case 0x0:
             printf("and:\n");
-            and(core,instruction);
             break;
         case 0x1:
             printf("orr:\n");
-            orr(core,instruction);
             break;
         case 0x2:
             printf("xor:\n");
-            xor(core,instruction);
             break;
         case 0x3:
             printf("add:\n");
-            add(core,instruction);
             break;
         case 0x4:
             printf("adc:\n");
-            adc(core,instruction);
             break;
         case 0x5:
             printf("cmp:\n");
-            cmp(core,instruction);
             break;
         case 0x6:
             printf("sub:\n");
-            sub(core,instruction);
             break;
         case 0x7:
             printf("sbc:\n");
-            sbc(core,instruction);
             break;
         case 0x8:
             printf("movv:\n");
-            mov(core,instruction);
             break;
         case 0x9:
             printf("lsh:\n");
-            lsh(core,instruction);
             break;
         case 0xA:
             printf("rsh:\n");
+            break; 
+        default:
+            break;
+    }
+}
+
+void execute(sCore* core, sInstruction instruction){
+    switch (instruction.opcode){
+        case 0x0:
+            and(core,instruction);
+            break;
+        case 0x1:
+            orr(core,instruction);
+            break;
+        case 0x2:
+            xor(core,instruction);
+            break;
+        case 0x3:
+            add(core,instruction);
+            break;
+        case 0x4:
+            adc(core,instruction);
+            break;
+        case 0x5:
+            cmp(core,instruction);
+            break;
+        case 0x6:
+            sub(core,instruction);
+            break;
+        case 0x7:
+            sbc(core,instruction);
+            break;
+        case 0x8:
+            mov(core,instruction);
+            break;
+        case 0x9:
+            lsh(core,instruction);
+            break;
+        case 0xA:
             rsh(core,instruction);
             break; 
         default:
             printf("wrong upcode\n");
             exit(EXIT_FAILURE);
             break;
+    }
+    if (VERBOSE){
+        printInstruction(instruction.opcode);
     }
 }
