@@ -5,7 +5,6 @@
 
 int64_t selectVal2(sCore* core, sInstruction instruction){
     if (instruction.ivFlag){
-        //TODO: test neg conversion sign 8bits to sign 64bits
         return instruction.iv;
     }else{
         return core->rArray[instruction.ope2];
@@ -86,6 +85,8 @@ void cmp(sCore* core, sInstruction instruction){
     __int128_t tmp = (__int128_t) val1 - (__int128_t) val2;
     if (tmp < INT64_MIN && tmp > INT64_MAX){
         core->flags.CF = 1;
+    }else{
+        core->flags.CF = 0;
     }
     core->flags.SF = tmp < 0;
     core->flags.ZF = tmp == 0;
@@ -98,11 +99,10 @@ void sub(sCore* core, sInstruction instruction){
     __int128_t res = (__int128_t)val1 - (__int128_t)val2;
     if (res > INT64_MIN && res < INT64_MAX){
         core->flags.CF = 0;
-        core->rArray[instruction.dest] = (int64_t) res;
     }else{
         core->flags.CF = 1;
-        core->rArray[instruction.dest] = int128ToInt64(res);
     }
+    core->rArray[instruction.dest] = (int64_t) res;
     core->flags.SF = core->rArray[instruction.dest] < 0;
     core->flags.ZF = core->rArray[instruction.dest] == 0;
 }
@@ -114,11 +114,10 @@ void sbc(sCore* core, sInstruction instruction){
     __int128_t res = (__int128_t)val1 - (__int128_t)val2 + (__int128_t) (core->flags.CF - 1);
     if (res > INT64_MIN && res < INT64_MAX){
         core->flags.CF = 0;
-        core->rArray[instruction.dest] = (int64_t) res;
     }else{
         core->flags.CF = 1;
-        core->rArray[instruction.dest] = int128ToInt64(res);
     }
+    core->rArray[instruction.dest] = (int64_t) res;
     core->flags.SF = core->rArray[instruction.dest] < 0;
     core->flags.ZF = core->rArray[instruction.dest] == 0;
 }
