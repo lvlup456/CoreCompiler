@@ -94,19 +94,17 @@ int32_t* initInstructionArray(char* path){
     int32_t* instructArray = malloc(countLine(path) * sizeof(int32_t));
     char* pointerLine = NULL;
     size_t len = 0;
-    ssize_t read;
-    int lenLine;
     int i = 0;
+    getline(&pointerLine, &len, fp);
 
-    while ((read = getline(&pointerLine, &len, fp)) != -1){
-        lenLine = strlen(pointerLine);
+    while (*pointerLine != EOF){
         instructArray[i] = 0;
         for (int j = 3; j >= 0; j--){
-            //TODO: mult pow marche pas
             instructArray[i] += ((unsigned char) *pointerLine) * (int)powl(16,j*2);
             pointerLine++;
         }
         i++;
     }
+
     return instructArray;
 }

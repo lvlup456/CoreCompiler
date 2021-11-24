@@ -155,7 +155,6 @@ for line in instructions:
         #print(int(line[i*8:(i+1)*8],2).to_bytes(1,byteorder="big"))
         f.write(int(line[i*8:(i+1)*8],2).to_bytes(1,byteorder="big"))
 
-    f.write(ord("\n").to_bytes(1,byteorder="big"));
                 
 
 

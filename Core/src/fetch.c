@@ -57,7 +57,6 @@ void computeNewPc(sCore* core, int bcc, int32_t instruction){
 
 
 int32_t fetch(sCore* core, int32_t* instructionArray){
-
     int32_t instructionRaw = instructionArray[core->pc];
     int bcc = getFromBitTOBit32(instructionRaw, 28, 31);
     computeNewPc(core, bcc,instructionRaw);
