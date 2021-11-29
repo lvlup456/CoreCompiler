@@ -100,9 +100,9 @@ for line in lines :
             if (line[2].isnumeric()): 
                 instr+="1"
                 instr+=padding(bin(int(OPCODE.get(line[0]),16)).replace("0b",""))
-                instr+="0000"
-                instr+="0000"
                 instr+=padding(bin(int(REGISTERS.get(line[1]),16)).replace("0b",""))
+                instr+="0000"
+                instr+="0000"
                 iv=bin(int(line[2],16)).replace("0b","")
                 if (len(iv)<8) :
                     add = 8- len(iv)

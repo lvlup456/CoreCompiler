@@ -33,15 +33,17 @@ int main(int argc, char **argv){
     initSCore(&core);
     initSCoreWithValues(state, &core);
 
+    int32_t* instructionsArray = initInstructionArray(code);
+    FILE* fp = lireFichier(code);
+    fseek(fp, 0, SEEK_END);
+    int instructionsArraySize = ftell(fp)/4;
+    fclose(fp);
+
     if (VERBOSE){
-        printSCore(&core);  
+        printSCore(&core);
     }
 
-    int32_t* instructionsArray = initInstructionArray(code);
-    int instructionsArraySize = 0;
-    while (instructionsArray[instructionsArraySize] != '\0' ){
-        instructionsArraySize++;
-    }
+
     while (core.pc < instructionsArraySize){
         toBeExecRaw = fetch(&core, instructionsArray);
         if (toBeExecRaw != -1){

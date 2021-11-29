@@ -29,7 +29,6 @@ FILE* lireFichier(char* path){
     return fichier;
 }
 
-//TODO: test wrong file 
 void initSCoreWithValues(char* path, sCore* core){
     FILE* fp = lireFichier(path);
     char* pointerLine = NULL;
@@ -74,37 +73,25 @@ void initSCoreWithValues(char* path, sCore* core){
     fclose(fp);
 }
 
-int countLine(char* path){
-    FILE* fp = lireFichier(path);
-    char* pointerLine = NULL;
-    size_t len = 0;
-    ssize_t read;
-    int lineNumber = 0;
-    while ((read = getline(&pointerLine, &len, fp)) != -1){
-        lineNumber ++;
-    }
-    return lineNumber;
-}
-
-
 
 
 int32_t* initInstructionArray(char* path){
     FILE* fp = lireFichier(path);
-    int32_t* instructArray = malloc(countLine(path) * sizeof(int32_t));
-    char* pointerLine = NULL;
-    size_t len = 0;
+    fseek(fp, 0, SEEK_END); 
+    int size = ftell(fp)/4; 
+    fseek(fp, 0, SEEK_SET); 
+    int32_t* instructArray = malloc((size) * sizeof(int32_t));    
+    char pointerLine[2];
     int i = 0;
-    getline(&pointerLine, &len, fp);
 
-    while (*pointerLine != EOF){
+    for (int j = 0; j < (size*4); j+= 4){
         instructArray[i] = 0;
-        for (int j = 3; j >= 0; j--){
-            instructArray[i] += ((unsigned char) *pointerLine) * (int)powl(16,j*2);
-            pointerLine++;
+        for (int k = 0; k <= 3; k++){
+            fgets(pointerLine, 2, (FILE*)fp);
+            instructArray[i] += ((unsigned char) pointerLine[0]) * (int)powl(16,(3-k)*2);
         }
         i++;
     }
-
+    fclose(fp);
     return instructArray;
 }

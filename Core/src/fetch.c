@@ -52,6 +52,7 @@ void computeNewPc(sCore* core, int bcc, int32_t instruction){
         core->pc++;
         break;
     }
+
 } 
 
 

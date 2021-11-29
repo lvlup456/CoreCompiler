@@ -83,6 +83,7 @@ void cmp(sCore* core, sInstruction instruction){
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     __int128_t tmp = (__int128_t) val1 - (__int128_t) val2;
+    printf("%d, %lld %lld", instruction.ope1, val1, val2);
     if (tmp < INT64_MIN && tmp > INT64_MAX){
         core->flags.CF = 1;
     }else{
@@ -190,7 +191,7 @@ void printInstruction(int code){
             printf("sbc:\n");
             break;
         case 0x8:
-            printf("movv:\n");
+            printf("mov:\n");
             break;
         case 0x9:
             printf("lsh:\n");
