@@ -2,16 +2,19 @@ import argparse
 
 #Set arguments with argpars
 parser  = argparse.ArgumentParser(description="Compile assembly")
-parser.add_argument('-file' , help = "File to compile", required= True)
-parser.add_argument('-output' , help = "Output name", required= True)
+parser.add_argument('-f','-file' , help = "File to compile", required= True)
+parser.add_argument('-o','-output' , help = "Output name", required= True)
+parser.add_argument('-v', '-verbose',help ="Verbose mode", action='store_true')
 
 
 #Get args
 args = parser.parse_args()
-file_input  = args.file
-file_output = args.output
+file_input  = args.f
+file_output = args.o
+verbose = args.v
 
 
+#Padding for BCC, OPCODE, REGISTERS
 def padding(entree):
     if (len(entree) <4):
         add = 4- len(entree)
@@ -52,7 +55,7 @@ REGISTERS = {
     "R14":"14",
     "R15":"15"
 }
-#Opcode dictionnary
+#OPCODE dictionnary
 OPCODE = {
     "AND":"00",
     "ORR":"01",
@@ -70,6 +73,7 @@ OPCODE = {
 #Init instructions tab
 instructions = []
 
+#Read assembly file, s extension
 f = open(file_input,"r")
 lines = f.readlines()
 
@@ -77,10 +81,11 @@ for line in lines :
     instr = ""
     line = line.replace("\n","").replace(","," ").split(" ")
     line = [s.upper() for s in line if (len(s) !=0 )]
-    print(line)
+    if verbose :
+        print("Instruction Array")
+        print(line)
     if (BCC.get(line[0],"None") != "None"):
         instr += padding(bin(int(BCC.get(line[0]),10)).replace("0b",""))
-        print(padding(bin(int(BCC.get(line[0]),10)).replace("0b","")))
         if ("-" in line[1]):
             instr +="1" #Negatif
         else:
@@ -95,7 +100,6 @@ for line in lines :
     else:
         instr +="0000"
         instr +="000"
-        print(len(line))
         if (len(line) == 3):#Compare 
             if (line[2].isnumeric()): 
                 instr+="1"
@@ -142,15 +146,20 @@ for line in lines :
                 instr+="00000000"
             instructions.append(instr)
     
+#Write instructions in binary file
 f = open(file_output, "wb")
 for line in instructions:
-    print("Bits :", line)
-    print("Length: ", len(line))
+    if verbose :
+        print("Bits :", line)
+        print("Length: ", len(line))
     int_value = int(line,2)
-    print("Int value: ", int_value)
+    if verbose :
+        print("Int value: ", int_value)
     byte_value = int_value.to_bytes(4,byteorder="big")
-    print("Byte value: ", byte_value)
+    if verbose :
+        print("Byte value: ", byte_value)
 
+    #Write bit by bit instructions
     for i in range(0,4):
         #print(int(line[i*8:(i+1)*8],2).to_bytes(1,byteorder="big"))
         f.write(int(line[i*8:(i+1)*8],2).to_bytes(1,byteorder="big"))
