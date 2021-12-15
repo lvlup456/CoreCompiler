@@ -18,6 +18,13 @@ void setPcAccordingToFlag(sCore* core, int32_t instruction,int boolean){
     }
 }
 
+/**
+ * @brief compute the next pc
+ * 
+ * @param core 
+ * @param bcc 
+ * @param instruction 
+ */
 void computeNewPc(sCore* core, int bcc, int32_t instruction){
     int boolean;
     switch (bcc){
@@ -56,7 +63,13 @@ void computeNewPc(sCore* core, int bcc, int32_t instruction){
 } 
 
 
-
+/**
+ * @brief fetch the right instruction and compute the next pc
+ * 
+ * @param core 
+ * @param instructionArray 
+ * @return int32_t 
+ */
 int32_t fetch(sCore* core, int32_t* instructionArray){
     int32_t instructionRaw = instructionArray[core->pc];
     int bcc = getFromBitTOBit32(instructionRaw, 28, 31);

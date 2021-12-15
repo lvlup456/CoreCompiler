@@ -7,6 +7,11 @@ unsigned long rArray[15];
 sFlag flags;
 int pc;
 
+/**
+ * @brief print all the flags
+ * 
+ * @param flag 
+ */
 void printSFlags(sFlag* flag){
     printf("les flags: \n");
     printf("CF  = %X\n",flag->CF);
@@ -14,6 +19,11 @@ void printSFlags(sFlag* flag){
     printf("SF  = %X\n",flag->SF);
 }
 
+/**
+ * @brief print the core values
+ * 
+ * @param core 
+ */
 void printSCore(sCore* core){
     printf("The core Values:\n");
     printf("pc = %X\n", core->pc);
@@ -24,6 +34,11 @@ void printSCore(sCore* core){
     printSFlags(&core->flags);   
 }
 
+/**
+ * @brief print an instruction
+ * 
+ * @param instruction 
+ */
 void printSInstruction(sInstruction* instruction){
     printf("instruction: \n");
     printf("%x--",instruction->bcc);
@@ -36,11 +51,24 @@ void printSInstruction(sInstruction* instruction){
     printf("%x\n",instruction->iv);    
 }
 
-
+/**
+ * @brief Get the bitwanted in n
+ * 
+ * @param n 
+ * @param bitswanted 
+ * @return int32_t 
+ */
 int32_t getBits32(int32_t n, int bitswanted){
   return 0 != (n & (1 << bitswanted));;
 }
 
+/**
+ * @brief Get the bitwanted in n
+ * 
+ * @param n 
+ * @param bitswanted 
+ * @return int64_t 
+ */
 int64_t getBits64(int64_t n, int bitswanted){
   return 0 != (n & (1 << bitswanted));;
 }

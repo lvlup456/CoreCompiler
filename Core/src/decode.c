@@ -2,7 +2,12 @@
 #include "useful.h"
 
 
-
+/**
+ * @brief take a raw int32 bytes instruction and transform it into a sInstruction
+ * 
+ * @param instructionRaw 
+ * @return sInstruction 
+ */
 sInstruction decode(int32_t instructionRaw){
     sInstruction instruction;
 

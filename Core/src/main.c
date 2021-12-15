@@ -43,7 +43,7 @@ int main(int argc, char **argv){
         printSCore(&core);
     }
 
-
+    //main program loop
     while (core.pc < instructionsArraySize){
         toBeExecRaw = fetch(&core, instructionsArray);
         if (toBeExecRaw != -1){

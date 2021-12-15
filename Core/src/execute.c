@@ -3,6 +3,13 @@
 #include <math.h>
 #include "useful.h"
 
+/**
+ * @brief select the right value (ope2 or the IV)
+ * 
+ * @param core 
+ * @param instruction 
+ * @return int64_t 
+ */
 int64_t selectVal2(sCore* core, sInstruction instruction){
     if (instruction.ivFlag){
         return instruction.iv;
@@ -11,7 +18,12 @@ int64_t selectVal2(sCore* core, sInstruction instruction){
     }   
 }
 
-//it works
+/**
+ * @brief execute ADD
+ * 
+ * @param core 
+ * @param instruction 
+ */
 void add(sCore* core, sInstruction instruction){
     uint64_t val1,val2 = 0;
     __uint128_t res = 0;
@@ -29,8 +41,14 @@ void add(sCore* core, sInstruction instruction){
     core->rArray[instruction.dest] = res;
 }
 
+/**
+ * @brief execute ORR
+ * 
+ * @param core 
+ * @param instruction 
+ */
 void orr(sCore* core, sInstruction instruction){
-    int64_t val1,val2;
+    uint64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     core->rArray[instruction.dest] = val1 || val2;
@@ -40,8 +58,14 @@ void orr(sCore* core, sInstruction instruction){
     core->flags.SF = core->rArray[instruction.dest] < 0;
 }
 
+/**
+ * @brief execute AND 
+ * 
+ * @param core 
+ * @param instruction 
+ */
 void and(sCore* core, sInstruction instruction){
-    int64_t val1,val2;
+    uint64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     core->rArray[instruction.dest] = val1 && val2;
@@ -50,8 +74,14 @@ void and(sCore* core, sInstruction instruction){
     core->flags.SF = core->rArray[instruction.dest] < 0;
 }
 
+/**
+ * @brief execute XOR
+ * 
+ * @param core 
+ * @param instruction 
+ */
 void xor(sCore* core, sInstruction instruction){
-    int64_t val1,val2;
+    uint64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     core->rArray[instruction.dest] = val1 ^ val2;
@@ -60,7 +90,12 @@ void xor(sCore* core, sInstruction instruction){
     core->flags.SF = core->rArray[instruction.dest] < 0;
 }
 
-//it Works
+/**
+ * @brief execute ADC (add with counter)
+ * 
+ * @param core 
+ * @param instruction 
+ */
 void adc(sCore* core, sInstruction instruction){
     uint64_t val1,val2 = 0;
     __uint128_t res = 0;
@@ -78,12 +113,17 @@ void adc(sCore* core, sInstruction instruction){
     core->rArray[instruction.dest] = res;
 }
 
+/**
+ * @brief execute CMP (compare)
+ * 
+ * @param core 
+ * @param instruction 
+ */
 void cmp(sCore* core, sInstruction instruction){
     int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
     val2 = selectVal2(core,instruction);
     __int128_t tmp = (__int128_t) val1 - (__int128_t) val2;
-    printf("%d, %lld %lld", instruction.ope1, val1, val2);
     if (tmp < INT64_MIN && tmp > INT64_MAX){
         core->flags.CF = 1;
     }else{
@@ -93,6 +133,12 @@ void cmp(sCore* core, sInstruction instruction){
     core->flags.ZF = tmp == 0;
 }
 
+/**
+ * @brief execute SUB (substract)
+ * 
+ * @param core 
+ * @param instruction 
+ */
 void sub(sCore* core, sInstruction instruction){
     int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
@@ -108,6 +154,12 @@ void sub(sCore* core, sInstruction instruction){
     core->flags.ZF = core->rArray[instruction.dest] == 0;
 }
 
+/**
+ * @brief execute SBC (substract with counter)
+ * 
+ * @param core 
+ * @param instruction 
+ */
 void sbc(sCore* core, sInstruction instruction){
     int64_t val1,val2;
     val1 = core->rArray[instruction.ope1];
@@ -123,13 +175,24 @@ void sbc(sCore* core, sInstruction instruction){
     core->flags.ZF = core->rArray[instruction.dest] == 0;
 }
 
+/**
+ * @brief execute MOV (mouve)
+ * 
+ * @param core 
+ * @param instruction 
+ */
 void mov(sCore* core, sInstruction instruction){
     int val2;
     val2 = selectVal2(core,instruction);
     core->rArray[instruction.dest] = val2;
 }
 
-//it works
+/**
+ * @brief execute LSH (left shift)
+ * 
+ * @param core 
+ * @param instruction 
+ */
 void lsh(sCore* core, sInstruction instruction){
     __int128_t val1,val2, res = 0;
     val1 =  core->rArray[instruction.ope1];
@@ -147,6 +210,12 @@ void lsh(sCore* core, sInstruction instruction){
     core->flags.ZF = core->rArray[instruction.dest] == 0;
 }
 
+/**
+ * @brief execute RSH (right shift) 
+ * 
+ * @param core 
+ * @param instruction 
+ */
 void rsh(sCore* core, sInstruction instruction){
     __int128_t val1,val2, res = 0;
     val1 =  core->rArray[instruction.ope1];
@@ -164,6 +233,11 @@ void rsh(sCore* core, sInstruction instruction){
     core->flags.ZF = core->rArray[instruction.dest] == 0;
 }
 
+/**
+ * @brief print the opcode of the instruction
+ * 
+ * @param code 
+ */
 void printInstruction(int code){
     switch (code){
         case 0x0:
@@ -204,6 +278,12 @@ void printInstruction(int code){
     }
 }
 
+/**
+ * @brief execute the instruction with the value contain in the core
+ * 
+ * @param core 
+ * @param instruction 
+ */
 void execute(sCore* core, sInstruction instruction){
     switch (instruction.opcode){
         case 0x0:

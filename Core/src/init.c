@@ -5,6 +5,7 @@
 #include <string.h>
 #include <math.h>
 
+
 void initSFlag(sFlag* flag){
     flag->CF = 0;
     flag->ZF = 0;
@@ -29,6 +30,12 @@ FILE* lireFichier(char* path){
     return fichier;
 }
 
+/**
+ * @brief initialise the register with the <STATE> file value
+ * 
+ * @param path 
+ * @param core 
+ */
 void initSCoreWithValues(char* path, sCore* core){
     FILE* fp = lireFichier(path);
     char* pointerLine = NULL;
@@ -74,7 +81,12 @@ void initSCoreWithValues(char* path, sCore* core){
 }
 
 
-
+/**
+ * @brief initialise the instruction array with the <CODE> file values
+ * 
+ * @param path 
+ * @return int32_t* 
+ */
 int32_t* initInstructionArray(char* path){
     FILE* fp = lireFichier(path);
     fseek(fp, 0, SEEK_END); 

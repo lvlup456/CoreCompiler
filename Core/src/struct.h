@@ -9,7 +9,10 @@ struct sFlag{
     int SF  ; // Sign Flag (Drapeau de signe)
 };
 
-
+/**
+ * @brief struct that countain all the core value (register, pc and flags)
+ * 
+ */
 typedef struct sCore sCore;
 struct sCore{
     int64_t rArray[15];
@@ -20,7 +23,7 @@ struct sCore{
 /* 
    BCC  Zeros  opcode     ope2      IV
 0x|0000|000|0|0000|0000|0000|0000|00000000
-             IV     ope1     dest
+            IV     ope1     dest
 */
 typedef struct sInstruction sInstruction;
 struct sInstruction{
